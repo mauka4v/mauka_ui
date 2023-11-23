@@ -6,7 +6,7 @@ export const getTickerData = (tickers, range = "1d") => {
     body: JSON.stringify({ tickers: tickers, range: range }),
   };
   try {
-    return fetch(`https://${apiEndpoint}/api/`, requestOptions)
+    return fetch(`${apiEndpoint}/api/`, requestOptions)
       .then((response) => response.json())
       .then((data) => data);
   } catch (err) {
@@ -31,7 +31,7 @@ export const getBackTestData = (
     }),
   };
   try {
-    return fetch(`https://${apiEndpoint}/api/backtest/`, requestOptions)
+    return fetch(`${apiEndpoint}/api/backtest/`, requestOptions)
       .then((response) => (response !== undefined ? response.json() : {}))
       .then((data) => data)
       .catch(function (error) {
@@ -49,7 +49,7 @@ export const getSignalData = (tickers, range = "1d") => {
     headers: { "Content-Type": "application/json" },
   };
   try {
-    return fetch(`https://${apiEndpoint}/api/signal`)
+    return fetch(`${apiEndpoint}/api/signal`)
       .then((response) => response.json())
       .then((data) => data);
   } catch (err) {
@@ -73,7 +73,7 @@ export const getSignalDataForWatchList = (tickers) => {
   }
 
   try {
-    return fetch(`https://${apiEndpoint}/api/watchlist/`, requestOptions)
+    return fetch(`${apiEndpoint}/api/watchlist/`, requestOptions)
       .then((response) => response.json())
       .then((data) => data);
   } catch (err) {
