@@ -1,5 +1,5 @@
-import React from 'react';
-import moment from "moment"
+import React from "react";
+import moment from "moment";
 
 import {
   BarChart,
@@ -13,28 +13,28 @@ import {
   ReferenceLine,
   ResponsiveContainer,
   ComposedChart,
-  Scatter
-} from 'recharts';
-import { DD_HH_FMT, convertEpochToHumam } from '../../common/moment';
+  Scatter,
+} from "recharts";
+import { DD_HH_FMT, convertEpochToHumam } from "../../common/moment";
+import { background } from "@chakra-ui/react";
 const colors = [
-  '#1f77b4',
-  '#ff7f0e',
-  '#2ca02c',
-  '#d62728',
-  '#9467bd',
-  '#8c564b',
-  '#e377c2',
-  '#7f7f7f',
-  '#bcbd22',
-  '#17becf',
+  "#1f77b4",
+  "#ff7f0e",
+  "#2ca02c",
+  "#d62728",
+  "#9467bd",
+  "#8c564b",
+  "#e377c2",
+  "#7f7f7f",
+  "#bcbd22",
+  "#17becf",
 ];
 
 const CustomTooltip = ({ active, payload, label }) => {
   // console.log(label )
   if (active && payload && payload.length) {
+    const { OpenClose, BuyValue, SellValue } = payload[0].payload;
 
-    const {OpenClose, BuyValue, SellValue} = payload[0].payload
-    
     return (
       <div className="custom-tooltip">
         <p className="label">{` At Time ${label} `}</p>
@@ -45,9 +45,9 @@ const CustomTooltip = ({ active, payload, label }) => {
       </div>
     );
   }
-}
+};
 
-const Candlestick = props => {
+const Candlestick = (props) => {
   const {
     fill,
     x,
@@ -59,7 +59,7 @@ const Candlestick = props => {
     OpenClose: [Open, Close],
   } = props;
   const isGrowing = Open < Close;
-  const color = isGrowing ? 'green' : 'red';
+  const color = isGrowing ? "green" : "red";
   const ratio = Math.abs(height / (Open - Close));
   return (
     <g stroke={color} fill="none" strokeWidth="2">
@@ -108,65 +108,68 @@ const Candlestick = props => {
   );
 };
 
-const prepareData = data => {
+const prepareData = (data) => {
   return data.map(({ Open, Close, Date, Datetime, ...other }) => {
     return {
       ...other,
       Date: Date !== undefined && convertEpochToHumam(Date),
-      Datetime: Datetime !== undefined && convertEpochToHumam(Datetime, DD_HH_FMT),
+      Datetime:
+        Datetime !== undefined && convertEpochToHumam(Datetime, DD_HH_FMT),
       OpenClose: [Open, Close],
     };
   });
 };
 
-
 export const CustomShapeBarChart = (props) => {
-  const {Data, Interval} = props
+  const { Data, Interval } = props;
   const data = prepareData(Data);
   const minValue = data.reduce(
     (minValue, { Low, OpenClose: [Open, Close] }) => {
       const currentMin = Math.min(Low, Open, Close);
       return minValue === null || currentMin < minValue ? currentMin : minValue;
     },
-    null,
+    null
   );
   const maxValue = data.reduce(
     (maxValue, { High, OpenClose: [Open, Close] }) => {
       const currentMax = Math.max(High, Open, Close);
       return currentMax > maxValue ? currentMax : maxValue;
     },
-    minValue,
+    minValue
   );
 
   return (
     <ResponsiveContainer width="100%" height="70%">
       <ComposedChart data={data}>
-      <XAxis dataKey={Interval === "1h" ? "Datetime" : "Date"}/>
-      <YAxis 
-      type="number"
-          domain={['auto', 'auto']} /> 
-          <ReferenceLine y={'dataMin'} stroke="#000" />
-      {/* <CartesianGrid strokeDasharray="3 3" /> */}
-      <Scatter 
-          dataKey={(v)=>v.BuyValue ? v.BuyValue : parseInt(v.Open/2)}
-          name="BuyValue" fill="yellow"  strokeWidth={10} />
-        <Scatter 
-          dataKey={(v)=>v.SellValue ? v.SellValue : parseInt(v.Open/2)}
-          name="SellValue" 
-          fill="red" 
-          />
-      <Bar
-        dataKey="OpenClose"
-        fill="#8884d8"
-        shape={<Candlestick />}
-      >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={colors[index % 20]} />
-        ))}
-      </Bar>
-      <Legend/>
+        <XAxis
+          dataKey={
+            Interval.includes("h") || Interval.includes("m")
+              ? "Datetime"
+              : "Date"
+          }
+        />
+        <YAxis type="number" domain={["auto", "auto"]} />
+        <ReferenceLine y={"dataMin"} stroke="#000" />
+        {/* <CartesianGrid strokeDasharray="3 3" /> */}
+        <Scatter
+          dataKey={(v) => (v.BuyValue ? v.BuyValue : parseInt(v.Open / 2))}
+          name="OpenPos"
+          fill={"brand.100"}
+          strokeWidth={10}
+        />
+        <Scatter
+          dataKey={(v) => (v.SellValue ? v.SellValue : parseInt(v.Open / 2))}
+          name="ClosePos"
+          fill="cyan"
+        />
+        <Bar dataKey="OpenClose" fill="#8884d8" shape={<Candlestick />}>
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={colors[index % 20]} />
+          ))}
+        </Bar>
+        <Legend />
         <Tooltip content={<CustomTooltip />} />
-    </ComposedChart>
+      </ComposedChart>
     </ResponsiveContainer>
   );
 };
