@@ -51,10 +51,19 @@ function BackTest(props) {
   const [isLoading, setIsLoading] = useState(() => true);
   const [interval, setInterval] = useState(store.interval);
   const dispatch = useDispatch();
-  const handleChange = (event) => setValue(event.target.value);
+  const handleChange = (event) => {
+    console.log(event.key);
+    setValue(event.target.value.toUpperCase());
+  };
 
   const handleDateSelect = (dt) => console.log(" Date Selected : ", dt);
   const handleDateChange = (dt) => console.log(" Date Changed  : ", dt);
+  const onKeyDownHandler = (e) => {
+    if (e.key === "Enter") {
+      onSubmitHandler();
+    }
+  };
+
   const onSubmitHandler = () => {
     if (value) {
       console.log("Sumit Handler has interval : ", interval);
@@ -127,6 +136,7 @@ function BackTest(props) {
                 placeholder="Ticker"
                 value={value}
                 onChange={handleChange}
+                onKeyDown={onKeyDownHandler}
               />
             </Box>
             <Box>
