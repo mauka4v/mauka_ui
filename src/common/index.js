@@ -59,3 +59,7 @@ export const PRICE_ACTION = "TotSignal";
 export const RSI = "RSI_SIGNAL";
 export const MACD = "MACD_SIGNAL";
 export const COLS_TO_PUBLISH = ["ticker", "category", "Daily", "Weekly"];
+export const isListEmpty = (resp) =>
+  Array.isArray(resp) && resp.length ? false : true;
+export const isObjEmpty = (resp) =>
+  resp && Object.keys(resp).length ? false : true;

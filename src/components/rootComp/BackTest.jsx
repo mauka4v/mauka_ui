@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { getBackTestData } from "../../api/maukaApi";
-import { isTextAllowed, UNDEFINED, periodButtonConf } from "../../common";
+import {
+  isTextAllowed,
+  UNDEFINED,
+  periodButtonConf,
+  isObjEmpty,
+} from "../../common";
 import DataTableComp from "../table";
 import { Progress, Text, Textarea } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
@@ -43,7 +48,7 @@ function BackTest(props) {
     "Your Data Will Display Here"
   );
   const [isInvalid, setIsInvalid] = useState(() => false);
-  const [isLoading, setIsLoading] = useState(() => false);
+  const [isLoading, setIsLoading] = useState(() => true);
   const [interval, setInterval] = useState(store.interval);
   const dispatch = useDispatch();
   const handleChange = (event) => setValue(event.target.value);
@@ -77,23 +82,32 @@ function BackTest(props) {
     return divs;
   };
   async function fetchData(symbols, startDate, endDate, range) {
-    setBackTestData("");
-    setTableData({});
+    resetComp();
     const resp = await getBackTestData(
       symbols,
       (startDate = ""),
       (endDate = ""),
       range
     );
-    if (resp === undefined) {
+    if (resp === undefined && isObjEmpty(resp)) {
+      setIsInvalid(true);
+      setIsLoading(false);
       return 0;
     }
+    setIsLoading(false);
     const respBacktest = resp !== undefined ? resp["backtest_data"] : "";
     console.log(typeof respBacktest, respBacktest.split("\\n"));
     const parsedData = JSON.parse(resp["ticker_data"]);
     parsedData.length > 0 && setTableData(parsedData);
     setBackTestData(respBacktest);
   }
+
+  const resetComp = () => {
+    setBackTestData("");
+    setTableData({});
+    setIsInvalid(false);
+    setIsLoading(true);
+  };
 
   React.useEffect(() => {
     if (Active === Index) {
@@ -149,11 +163,13 @@ function BackTest(props) {
              <BacktestChart Interval={interval} Data={tableData}/> 
              : <Progress size='sm' isIndeterminate />
             } */}
-          {tableData && tableData.length > 0 ? (
-            <CustomShapeBarChart Interval={interval} Data={tableData} />
-          ) : (
-            <Progress size="sm" isIndeterminate />
-          )}
+          {
+            tableData && tableData.length > 0 && !isInvalid && (
+              <CustomShapeBarChart Interval={interval} Data={tableData} />
+            )
+            // : (        !isInvalid && <Progress size="sm" isIndeterminate /> )
+          }
+          {isInvalid && <Text> No Data found for ticker !!!</Text>}
         </FormControl>
         <div>{prepareBackTestResult(backtestData)}</div>
       </Box>
