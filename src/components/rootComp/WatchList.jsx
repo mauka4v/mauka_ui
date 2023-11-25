@@ -88,7 +88,7 @@ function WatchList(props) {
         <FormControl isRequired>
           <FormLabel>Watch List</FormLabel>
           <HStack spacing="24px">
-            <Box w="50vw" h="40px">
+            <Box w="20vw" h="40px">
               <Input
                 isInvalid={isInvalid}
                 placeholder="Add Ticker to WatchList"
@@ -96,13 +96,13 @@ function WatchList(props) {
                 onChange={handleInputChange}
               />
             </Box>
-            <Box w="20vw" h="2rem">
+            {/* <Box w="20vw" h="2rem">
               <RadioButtons
                 Value={period}
                 Params={periodButtonConf}
                 OnChange={onPeriodChange}
               />
-            </Box>
+            </Box> */}
             <Box w="20vw" h="40px">
               <Button
                 isLoading={isLoading}
