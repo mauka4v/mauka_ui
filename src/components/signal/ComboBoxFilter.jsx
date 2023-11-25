@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setSignalFilters } from "../../redux/reducers";
 
 function ComboBoxFilter(props) {
-  const { Options, Name, IsClearValue } = props;
+  const { Options, Name, IsClearValue, Title } = props;
   const [value, setValue] = useState("");
   const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ function ComboBoxFilter(props) {
     <Select
       width="10rem"
       size="md"
-      placeholder="Message Type Filter"
+      placeholder={`${Title} Filter`}
       onChange={handleChange}
       value={value}
     >

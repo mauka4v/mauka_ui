@@ -81,13 +81,14 @@ function WatchList(props) {
   return (
     <Box>
       <Box>
-        <i>
-          *Trends are subject to change on upcoming News, Mergers and
-          Earnings!!!
-        </i>
         <FormControl isRequired>
-          <FormLabel>Watch List</FormLabel>
-          <HStack spacing="24px">
+          <FormLabel>
+            <i>
+              *Trends are subject to change on upcoming News, Mergers and
+              Earnings!!!
+            </i>
+          </FormLabel>
+          <HStack spacing="24px" mb="1rem">
             <Box w="20vw" h="40px">
               <Input
                 isInvalid={isInvalid}

@@ -8,11 +8,16 @@ function Filters(props) {
   const { IsClearValue } = props;
 
   const inputBox = (name) => <FilterInput Name={name} IsClear={IsClearValue} />;
-  const selectBox = (name, options) => (
-    <ComboBoxFilter Name={name} Options={options} IsClearValue={IsClearValue} />
+  const selectBox = (name, options, title) => (
+    <ComboBoxFilter
+      Name={name}
+      Options={options}
+      IsClearValue={IsClearValue}
+      Title={title}
+    />
   );
   const filterElementMap = {
-    select: (name, options) => selectBox(name, options),
+    select: (name, options, title) => selectBox(name, options, title),
     input: (name) => inputBox(name),
   };
 
@@ -21,7 +26,7 @@ function Filters(props) {
     (signal) =>
       signal.isFilter &&
       filterElemets.push(
-        filterElementMap[signal.type](signal.name, signal.options)
+        filterElementMap[signal.type](signal.name, signal.options, signal.title)
       )
   );
   return <>{filterElemets}</>;
