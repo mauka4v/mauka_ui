@@ -4,7 +4,7 @@ import { handleSignalFilters } from ".";
 export const watchListSlice = createSlice({
   name: "watchList",
   initialState: {
-    watchList: [],
+    watchList: ["NVDA", "AMZN", "RIVN", "NFLX"],
     period: "1d",
     ticker: "",
     interval: "1d",
@@ -12,9 +12,11 @@ export const watchListSlice = createSlice({
   },
   reducers: {
     addTickerToWatchList: (state, action) => {
-      console.log(state, action.payload);
+      const currentState = current(state);
+      const oldWatchListTickers = currentState.watchList;
       const ticker = action.payload.ticker;
-      state.watchList.push(ticker);
+      const newTickes = [...oldWatchListTickers, ticker];
+      state.watchList = newTickes;
     },
     removeTickerToWatchList: (state, action) => {
       const ticker = action.payload.ticker;

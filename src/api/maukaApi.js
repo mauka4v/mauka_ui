@@ -1,3 +1,4 @@
+import { isListEmpty, isObjEmpty } from "../common";
 import { apiEndpoint } from "./";
 export const getTickerData = (tickers, range = "1d") => {
   const requestOptions = {
@@ -50,7 +51,7 @@ export const getSignalData = (tickers, range = "1d") => {
   };
   try {
     return fetch(`${apiEndpoint}/api/signal`)
-      .then((response) => response.json())
+      .then((response) => (isObjEmpty(response) ? {} : response.json()))
       .then((data) => data);
   } catch (err) {
     console.log(`Failed with ${err}`);
@@ -74,7 +75,7 @@ export const getSignalDataForWatchList = (tickers) => {
 
   try {
     return fetch(`${apiEndpoint}/api/watchlist/`, requestOptions)
-      .then((response) => response.json())
+      .then((response) => (isListEmpty(response) ? [] : response.json()))
       .then((data) => data);
   } catch (err) {
     console.log(`Failed with ${err}`);

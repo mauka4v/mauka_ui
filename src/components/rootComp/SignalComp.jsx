@@ -7,6 +7,7 @@ import { clearSignalFilters } from "../../redux/reducers";
 import SignalTable from "../signal/SignalTable";
 import Filters from "../signal/Filters";
 import { FormControl, Box, Button, HStack } from "@chakra-ui/react";
+import { isListEmpty, isObjEmpty } from "../../common";
 
 function SignalComp(props) {
   const { Index, Active } = props;
@@ -17,7 +18,7 @@ function SignalComp(props) {
   const [tableData, setTableData] = useState({});
   const [clearFilter, setClearFilter] = useState(() => false);
   const [isLoading, setIsLoading] = useState(() => false);
-  const [signalData, setSignalData] = useState(() => []);
+  const [signalData, setSignalData] = useState();
   const [period, setPeriod] = useState(store.period);
   const [filterValue, setFilterValue] = useState(() => "");
   const [filteredRowData, setFilteredRowData] = useState([]);
@@ -53,15 +54,24 @@ function SignalComp(props) {
   async function fetchData() {
     // Fetch Data from DB
     const signalDataResp = await getSignalData();
+    console.log(
+      "SIGNAL DATA IS : ",
+      signalDataResp,
+      isObjEmpty(signalDataResp)
+    );
+    if (isObjEmpty(signalDataResp)) {
+      setSignalData([]);
+      return 0;
+    }
     signalDataResp && setSignalData(signalDataResp);
   }
 
   React.useEffect(() => {
     // Fetch Data only when Signal tab is Active
-    if (Active === Index) {
-      signalData.length === 0 && fetchData();
+    if (Active === Index && signalData === undefined) {
+      fetchData();
     }
-    filterMulti(signalData, signalFilters, 1);
+    !isObjEmpty(signalData) && filterMulti(signalData, signalFilters, 1);
   }, [
     watchList,
     period,
@@ -85,7 +95,7 @@ function SignalComp(props) {
           </HStack>
         </FormControl>
       </Box>
-      {Object.keys(signalData).length > 0 && (
+      {signalData !== undefined && !isObjEmpty(signalData) && (
         <SignalTable Data={filteredRowData} Filter={signalFilters} />
       )}
     </Box>

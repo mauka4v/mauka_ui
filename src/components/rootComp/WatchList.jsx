@@ -5,6 +5,7 @@ import {
   UNDEFINED,
   periodButtonConf,
   COLS_TO_PUBLISH,
+  isListEmpty,
 } from "../../common";
 import DataTableComp from "../table";
 import { Progress } from "@chakra-ui/react";
@@ -18,6 +19,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Text,
   Box,
   Button,
   HStack,
@@ -34,20 +36,20 @@ function WatchList(props) {
   const [tableData, setTableData] = useState({});
   const [isInvalid, setIsInvalid] = useState(() => false);
   const [isLoading, setIsLoading] = useState(() => false);
-  const [signalData, setSignalData] = useState([]);
   const [period, setPeriod] = useState(store.period);
-  const [userWatchlist, setUserWatchlist] = useState([
-    "NVDA",
-    "AMZN",
-    "RIVN",
-    "NFLX",
-  ]);
+  const [userWatchlist, setUserWatchlist] = useState(watchList);
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     const ticker = e.target.value;
     setInput(ticker);
     setUserWatchlist((prevValue) => [...prevValue, ticker]);
+  };
+
+  const onKeyDownHandler = (e) => {
+    if (e.key === "Enter") {
+      onSubmitHandler();
+    }
   };
 
   const onSubmitHandler = async () => {
@@ -64,19 +66,25 @@ function WatchList(props) {
   };
 
   async function getWatchListData(tickers = []) {
+    setIsLoading(true);
     const response = await getSignalDataForWatchList(tickers);
+    if (isListEmpty(response)) {
+      setIsLoading(false);
+      return 0;
+    }
     const userWatchListData = response.filter(({ ticker }) =>
       userWatchlist.includes(ticker)
     );
+    setIsLoading(false);
     setTableData(userWatchListData);
-    return userWatchListData;
   }
 
   React.useEffect(() => {
+    console.log("Calling Watchlist for ", watchList);
     if (Index === Active) {
-      getWatchListData([]);
+      getWatchListData(watchList);
     }
-  }, [userWatchlist, period, Active]);
+  }, [watchList, period, Active]);
 
   return (
     <Box>
@@ -95,6 +103,7 @@ function WatchList(props) {
                 placeholder="Add Ticker to WatchList"
                 value={input}
                 onChange={handleInputChange}
+                onKeyDown={onKeyDownHandler}
               />
             </Box>
             {/* <Box w="20vw" h="2rem">
@@ -110,7 +119,6 @@ function WatchList(props) {
                 onClick={onSubmitHandler}
                 variant="brandPrimary"
               >
-                {" "}
                 Submit
               </Button>
             </Box>
@@ -118,14 +126,14 @@ function WatchList(props) {
         </FormControl>
       </Box>
 
-      {Object.keys(tableData).length > 0 ? (
+      {Object.keys(tableData).length ? (
         <DataTableComp
           TickersData={tableData}
           Columns={COLS_TO_PUBLISH}
           Actions={true}
         />
       ) : (
-        <Progress size="xs" isIndeterminate />
+        <Text> No Watchlist Found !!! </Text>
       )}
     </Box>
   );
