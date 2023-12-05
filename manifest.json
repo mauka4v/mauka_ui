@@ -1,0 +1,10 @@
+{
+  "short_name": "Mauka - The Opportunity",
+  "name": "Identifying Opportunity to Open Positions",
+  "icons": [
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
