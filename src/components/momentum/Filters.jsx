@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { momentumColumns } from "../../common/momentum";
+import { Box, Input } from "@chakra-ui/react";
 import FilterInput from "./FilterInput";
 import ComboBoxFilter from "./ComboBoxFilter";
 
 function Filters(props) {
-  const { IsClearValue, SignalConf } = props;
+  const { IsClearValue } = props;
 
   const inputBox = (name) => <FilterInput Name={name} IsClear={IsClearValue} />;
   const selectBox = (name, options, title) => (
@@ -20,7 +22,7 @@ function Filters(props) {
   };
 
   const filterElemets = [];
-  SignalConf.map(
+  momentumColumns.map(
     (signal) =>
       signal.isFilter &&
       filterElemets.push(

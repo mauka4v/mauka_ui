@@ -80,7 +80,6 @@ function WatchList(props) {
   }
 
   React.useEffect(() => {
-    console.log("Calling Watchlist for ", watchList);
     if (Index === Active) {
       getWatchListData(watchList);
     }

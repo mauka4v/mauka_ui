@@ -4,13 +4,14 @@ import WatchList from "./WatchList";
 import BackTest from "./BackTest";
 import SignalComp from "./SignalComp";
 import { useSelector, useDispatch } from "react-redux";
+import SignalMomentum from "./SignalMomComp";
 
 function MainContent() {
   const [tabIndex, setTabIndex] = useState(0);
   const defaultIndex = 0;
 
   const tabListMap = {
-    Signals: (active) => <SignalComp Index={0} Active={active} />,
+    Signals: (active) => <SignalMomentum Index={0} Active={active} />,
     WatchList: (active) => <WatchList Index={1} Active={active} />,
     BackTest: (active) => <BackTest Index={2} Active={active} />,
   };

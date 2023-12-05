@@ -23,13 +23,23 @@ import {
 // import { useDispatch } from "react-redux";
 // import ColumnFilter from "./ColumnFilter";
 import "./DataTable.css";
+import { isListEmpty } from "../../common";
 
-export function DataTable({ data, columns, RowsCount }) {
+export function DataTable(props) {
+  const { data, columns, RowsCount, PageNumber, PageLimit } = props;
+  const pageNumber = props.pageNumber || 1;
+  const pageLimit = props.PageLimit || 100;
   const [sorting, setSorting] = React.useState([]);
   const [columnsDef, setColumnsDef] = React.useState(() => columns);
+  const [tableData, setTableData] = React.useState(() => data);
+
+  React.useEffect(() => {
+    setTableData(data);
+  }, [pageNumber, pageLimit, data]);
+
   const table = useReactTable({
     columns,
-    data,
+    data: tableData,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),

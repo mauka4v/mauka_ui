@@ -50,8 +50,21 @@ export const getSignalData = (tickers, range = "1d") => {
     headers: { "Content-Type": "application/json" },
   };
   try {
-    return fetch(`${apiEndpoint}/api/signal`)
-      .then((response) => (isObjEmpty(response) ? {} : response.json()))
+    return fetch(`${apiEndpoint}/api/signal/`)
+      .then((response) => response !== undefined && response.json())
+      .then((data) => data);
+  } catch (err) {
+    console.log(`Failed with ${err}`);
+  }
+};
+export const getMomentumData = () => {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+  try {
+    return fetch(`${apiEndpoint}/api/momentum/`)
+      .then((response) => response !== undefined && response.json())
       .then((data) => data);
   } catch (err) {
     console.log(`Failed with ${err}`);
@@ -75,7 +88,7 @@ export const getSignalDataForWatchList = (tickers) => {
 
   try {
     return fetch(`${apiEndpoint}/api/watchlist/`, requestOptions)
-      .then((response) => (isListEmpty(response) ? [] : response.json()))
+      .then((response) => response !== undefined && response.json())
       .then((data) => data);
   } catch (err) {
     console.log(`Failed with ${err}`);

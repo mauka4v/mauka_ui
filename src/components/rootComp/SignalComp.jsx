@@ -8,6 +8,7 @@ import SignalTable from "../signal/SignalTable";
 import Filters from "../signal/Filters";
 import { FormControl, Box, Button, HStack } from "@chakra-ui/react";
 import { isListEmpty, isObjEmpty } from "../../common";
+import { signalColumns } from "../../common/signal";
 
 function SignalComp(props) {
   const { Index, Active } = props;
@@ -54,12 +55,7 @@ function SignalComp(props) {
   async function fetchData() {
     // Fetch Data from DB
     const signalDataResp = await getSignalData();
-    console.log(
-      "SIGNAL DATA IS : ",
-      signalDataResp,
-      isObjEmpty(signalDataResp)
-    );
-    if (isObjEmpty(signalDataResp)) {
+    if (isListEmpty(signalDataResp)) {
       setSignalData([]);
       return 0;
     }
@@ -70,8 +66,10 @@ function SignalComp(props) {
     // Fetch Data only when Signal tab is Active
     if (Active === Index && signalData === undefined) {
       fetchData();
+      // } else {
+      !isListEmpty(signalData) &&
+        filterMulti(signalData, signalFilters, pageNumber);
     }
-    !isObjEmpty(signalData) && filterMulti(signalData, signalFilters, 1);
   }, [
     watchList,
     period,
@@ -87,7 +85,7 @@ function SignalComp(props) {
       <Box>
         <FormControl isRequired>
           <HStack spacing="24px">
-            <Filters IsClearValue={clearFilter} />
+            <Filters IsClearValue={clearFilter} SignalConf={signalColumns} />
             <Button variant="brandPrimary" onClick={applySignalFilters}>
               Apply Filter
             </Button>
