@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/mauka/static/css/main.aeae3976.css",
-    "main.js": "/mauka/static/js/main.0d24e1d7.js",
-    "index.html": "/mauka/index.html",
-    "main.aeae3976.css.map": "/mauka/static/css/main.aeae3976.css.map",
-    "main.0d24e1d7.js.map": "/mauka/static/js/main.0d24e1d7.js.map"
+    "main.css": "/static/css/main.aeae3976.css",
+    "main.js": "/static/js/main.0d24e1d7.js",
+    "index.html": "/index.html",
+    "main.aeae3976.css.map": "/static/css/main.aeae3976.css.map",
+    "main.0d24e1d7.js.map": "/static/js/main.0d24e1d7.js.map"
   },
   "entrypoints": [
     "static/css/main.aeae3976.css",
