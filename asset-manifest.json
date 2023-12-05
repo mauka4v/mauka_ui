@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/mauka/static/css/main.aeae3976.css",
+    "main.js": "/mauka/static/js/main.0d24e1d7.js",
+    "index.html": "/mauka/index.html",
+    "main.aeae3976.css.map": "/mauka/static/css/main.aeae3976.css.map",
+    "main.0d24e1d7.js.map": "/mauka/static/js/main.0d24e1d7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aeae3976.css",
+    "static/js/main.0d24e1d7.js"
+  ]
+}
