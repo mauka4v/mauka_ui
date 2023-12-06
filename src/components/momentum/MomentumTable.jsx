@@ -65,6 +65,14 @@ export const columns = [
       isNumeric: false,
     },
   }),
+  columnHelper.accessor("profit_std", {
+    field: "profit_std",
+    cell: (info) => info.getValue(),
+    header: "Profit Signal Till Date (%)",
+    meta: {
+      isNumeric: false,
+    },
+  }),
 ];
 
 const signalCreateDateFmt = (date) => (

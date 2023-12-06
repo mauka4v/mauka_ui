@@ -91,8 +91,8 @@ function SignalMomentum(props) {
       for (let filterMap of filters) {
         filteredData = filterUsingMap(filteredData, filterMap);
       }
-      const rowStartIdx = page === 1 ? 1 : (page - 1) * pageLimit + 1;
-      const rowEndIdx = page === 1 ? 101 : page * pageLimit + 1;
+      const rowStartIdx = page === 1 ? 0 : (page - 1) * pageLimit + 1;
+      const rowEndIdx = page === 1 ? 100 : page * pageLimit + 1;
       setFilteredRowData(filteredData.slice(rowStartIdx, rowEndIdx));
       setPageCount(Math.ceil(filteredData.length / pageLimit));
     },
